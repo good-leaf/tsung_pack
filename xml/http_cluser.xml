@@ -2,7 +2,7 @@
 <!DOCTYPE tsung SYSTEM "/usr/local/share/tsung/tsung-1.0.dtd">
 <tsung loglevel="notice" version="1.0" dumptraffic="true">
 
-  <!-- Client side setup -->
+    <!-- Client side setup -->
     <clients>
         <client host="tsung12" use_controller_vm="true" maxusers='10000000000000000'>
             <ip value="127.0.0.1"></ip>
@@ -14,83 +14,88 @@
             <ip value="127.0.0.3"></ip>
         </client>
     </clients>
-  
-  <!-- Server side setup -->
-<servers>
-  <!--server host="ivrcall.etecall.vip.com" port="80" type="tcp"></server-->
-    <server host="127.0.0.1" port="8415" type="tcp"></server>
 
-</servers>
+    <!-- Server side setup -->
+    <servers>
+        <!--server host="ivrcall.etecall.vip.com" port="80" type="tcp"></server-->
+        <server host="127.0.0.1" port="8415" type="tcp"></server>
 
-  <!-- to start os monitoring (cpu, network, memory). Use an erlang
-  agent on the remote machine or SNMP. erlang is the default --> 
-  <!--monitoring>
-    <monitor host="localhost" type="snmp"></monitor>
-  </monitoring-->
-  
-  <load>
-  <!-- several arrival phases can be set: for each phase, you can set
-  the mean inter-arrival time between new clients and the phase
-  duration minute hour second-->
-   <arrivalphase phase="1" duration="replace-duration" unit="replace-unit">
-     <users arrivalrate="replace-arrivalrate" unit="replace-rate-unit"></users>
-   </arrivalphase>
-  </load>
+    </servers>
 
-  <options>
-   <!--option name="file_server" id='tokeninfo' value="auto_call_token.csv"/-->
-   <option name="file_server" id='tts' value="/opt/tsung/tsung_task/shell/tts.csv"/>
-   <option type="ts_http" name="user_agent">
-       <user_agent probability="80">Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.8) Gecko/20050513 Galeon/1.3.21</user_agent>
-       <user_agent probability="20">Mozilla/5.0 (Windows; U; Windows NT 5.2; fr-FR; rv:1.7.8) Gecko/20050511 Firefox/1.0.4</user_agent>
-   </option>
-  </options>
+    <!-- to start os monitoring (cpu, network, memory). Use an erlang
+    agent on the remote machine or SNMP. erlang is the default -->
+    <!--monitoring>
+      <monitor host="localhost" type="snmp"></monitor>
+    </monitoring-->
 
-  <!-- start a session for a http user. the probability is the
-  frequency of this type os session. The sum of all session's
-  probabilities must be 100 -->
+    <load>
+        <!-- several arrival phases can be set: for each phase, you can set
+        the mean inter-arrival time between new clients and the phase
+        duration minute hour second-->
+        <arrivalphase phase="1" duration="replace-duration" unit="replace-unit">
+            <users arrivalrate="replace-arrivalrate" unit="replace-rate-unit"></users>
+        </arrivalphase>
+    </load>
 
- <sessions>
- <session name="http-example1" probability="100" type="ts_http">
-    <!--request subst="true">
-    <dyn_variable name="token" jsonpath="auth_token"/>
-    <http url="/v1/api_auth" method="PUT" content_type="application/json; charset=utf-8" contents='{"data":{"api_key":"dd587c0feccac518da982b386d535d90b0d18089001ef444645035ea3b807c0b"}}' version="1.1">
-    </http>
-    </request-->
- <!--/session>
+    <options>
+        <!--option name="file_server" id='tokeninfo' value="auto_call_token.csv"/-->
+        <option name="file_server" id='tts' value="/opt/tsung/tsung_task/shell/tts.csv"/>
+        <option type="ts_http" name="user_agent">
+            <user_agent probability="80">Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.8) Gecko/20050513
+                Galeon/1.3.21
+            </user_agent>
+            <user_agent probability="20">Mozilla/5.0 (Windows; U; Windows NT 5.2; fr-FR; rv:1.7.8) Gecko/20050511
+                Firefox/1.0.4
+            </user_agent>
+        </option>
+    </options>
 
-  <session name="http-example" probability="99" type="ts_http"-->
+    <!-- start a session for a http user. the probability is the
+    frequency of this type os session. The sum of all session's
+    probabilities must be 100 -->
 
-    <!-- full url with server name, this overrides the "server" config value -->
-    <!--setdynvars sourcetype="file" fileid="tokeninfo" delimiter=";" order="iter">
-        <var name="token" />
-    </setdynvars-->
-    <setdynvars sourcetype="file" fileid="tts" delimiter="|" order="iter">
-        <var name="tts_text_head" />
-        <var name="tts_text_tail" />
-    </setdynvars>
+    <sessions>
+        <session name="http-example1" probability="100" type="ts_http">
+            <!--request subst="true">
+            <dyn_variable name="token" jsonpath="auth_token"/>
+            <http url="/v1/api_auth" method="PUT" content_type="application/json; charset=utf-8" contents='{"data":{"api_key":"dd587c0feccac518da982b386d535d90b0d18089001ef444645035ea3b807c0b"}}' version="1.1">
+            </http>
+            </request-->
+            <!--/session>
 
-    <setdynvars sourcetype="random_number" start="10000000" end="99999999">
-        <var name="dest_num" />
-    </setdynvars>
-    <setdynvars sourcetype="random_string" length="20">
-        <var name="call_uuid" />
-    </setdynvars>
+             <session name="http-example" probability="99" type="ts_http"-->
 
-     <setdynvars sourcetype="random_number" start="1000000000000" end="9999999999999999999999">
-         <var name="tts_num" />
-     </setdynvars>
+            <!-- full url with server name, this overrides the "server" config value -->
+            <!--setdynvars sourcetype="file" fileid="tokeninfo" delimiter=";" order="iter">
+                <var name="token" />
+            </setdynvars-->
+            <setdynvars sourcetype="file" fileid="tts" delimiter="|" order="iter">
+                <var name="tts_text_head"/>
+                <var name="tts_text_tail"/>
+            </setdynvars>
 
-    <request subst="true"> 
-    <!--match name="request-result" do="log" when="match" subst="true">status</match-->
-    <http url="/auto_call" method="POST" content_type="application/json"
-   contents='{"tenant_id":"456789","app_uuid":"auto_call_app","app_call_uuid":"130ivr%%_call_uuid%%","dest_num":"150%%_dest_num%%","ivr_access_id":"2333", "display_num":"50864000","resp_url":"http://www.baidu.com","user_data":{},"auto_call_mode":0}'  version="1.1">
-    
-    </http> 
-    </request>
-    
-  </session>
+            <setdynvars sourcetype="random_number" start="10000000" end="99999999">
+                <var name="dest_num"/>
+            </setdynvars>
+            <setdynvars sourcetype="random_string" length="20">
+                <var name="call_uuid"/>
+            </setdynvars>
 
- </sessions>
+            <setdynvars sourcetype="random_number" start="1000000000000" end="9999999999999999999999">
+                <var name="tts_num"/>
+            </setdynvars>
+
+            <request subst="true">
+                <!--match name="request-result" do="log" when="match" subst="true">status</match-->
+                <http url="/auto_call" method="POST" content_type="application/json"
+                      contents='{"tenant_id":"456789","app_uuid":"auto_call_app","app_call_uuid":"130ivr%%_call_uuid%%","dest_num":"150%%_dest_num%%","ivr_access_id":"2333", "display_num":"50864000","resp_url":"http://www.baidu.com","user_data":{},"auto_call_mode":0}'
+                      version="1.1">
+
+                </http>
+            </request>
+
+        </session>
+
+    </sessions>
 </tsung>
 

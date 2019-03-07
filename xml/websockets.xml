@@ -1,56 +1,61 @@
 <?xml version="1.0"?>
 <!DOCTYPE tsung SYSTEM "/usr/local/share/tsung/tsung-1.0.dtd" []>
 <tsung loglevel="debug" version="1.0">
-  <clients>
-    <client host="localhost" use_controller_vm="true" maxusers="200000" >
-        <ip value="192.168.99.101" />
-    	<ip value="192.168.99.111" />
-    </client>
-  </clients>
+    <clients>
+        <client host="localhost" use_controller_vm="true" maxusers="200000">
+            <ip value="192.168.99.101"/>
+            <ip value="192.168.99.111"/>
+        </client>
+    </clients>
 
-  <servers>
-    <server host="127.0.0.1" port="80" type="tcp" />
-  </servers>
+    <servers>
+        <server host="127.0.0.1" port="80" type="tcp"/>
+    </servers>
 
-  <load>
-    <arrivalphase phase="1" duration="12000" unit="second">
-      <users maxnumber="5" arrivalrate="1" unit="second" />
-    </arrivalphase>
-  </load>
+    <load>
+        <arrivalphase phase="1" duration="12000" unit="second">
+            <users maxnumber="5" arrivalrate="1" unit="second"/>
+        </arrivalphase>
+    </load>
     <options>
-            <option name="file_server" id='hubdb' value="hub_list.csv"/>
+        <option name="file_server" id='hubdb' value="hub_list.csv"/>
     </options>
-  <sessions>
-    <session name="websocket" probability="100" type="ts_websocket">
-    <setdynvars sourcetype="file" fileid="hubdb" delimiter=";" order="iter">
-      
-    <var name="hub_mac" />
-        </setdynvars>
-        <request subst="true">
-             <websocket type="connect" path="/hub/comet?ver=v2.1"></websocket>
-        </request>
-<request subst="true">
-                <websocket type="message" frame="text">{"msg_type":"hub_activate", "qos":2, "sequence_id":"%%_hub_mac%%", "version":"v2.0", "request":{"hub_vendor":"yyj", "hub_mac":"%%_hub_mac%%", "key":"lenovo", "hub_type":"10009"}}</websocket>
-        </request>        
-    <for from="1" to="1000" var="counter">
-        <request>
-        <websocket type="message" frame="text">{"epoch":"XXXXXXXX", "msg_type":"keepalive", "device":"adadfadadf", "message_trait":"keepalive"}</websocket>    
-        </request>
-    <thinktime min="20" max="30" random="true" />
-    </for>
-<!--
-        <request subst="true">
-            <match do="log" when="nomatch">ok</match>
-            <websocket type="message">{"uid":"%%_uid%%", "data":"data"}</websocket>
-        </request>
+    <sessions>
+        <session name="websocket" probability="100" type="ts_websocket">
+            <setdynvars sourcetype="file" fileid="hubdb" delimiter=";" order="iter">
 
-        <request>
-            <websocket type="message" ack="no_ack">{"key":"value"}</websocket>
-        </request>
--->
-        <request>
-            <websocket type="close"></websocket>
-        </request> 
-    </session>
-  </sessions>
+                <var name="hub_mac"/>
+            </setdynvars>
+            <request subst="true">
+                <websocket type="connect" path="/hub/comet?ver=v2.1"></websocket>
+            </request>
+            <request subst="true">
+                <websocket type="message" frame="text">{"msg_type":"hub_activate", "qos":2,
+                    "sequence_id":"%%_hub_mac%%", "version":"v2.0", "request":{"hub_vendor":"yyj",
+                    "hub_mac":"%%_hub_mac%%", "key":"lenovo", "hub_type":"10009"}}
+                </websocket>
+            </request>
+            <for from="1" to="1000" var="counter">
+                <request>
+                    <websocket type="message" frame="text">{"epoch":"XXXXXXXX", "msg_type":"keepalive",
+                        "device":"adadfadadf", "message_trait":"keepalive"}
+                    </websocket>
+                </request>
+                <thinktime min="20" max="30" random="true"/>
+            </for>
+            <!--
+                    <request subst="true">
+                        <match do="log" when="nomatch">ok</match>
+                        <websocket type="message">{"uid":"%%_uid%%", "data":"data"}</websocket>
+                    </request>
+
+                    <request>
+                        <websocket type="message" ack="no_ack">{"key":"value"}</websocket>
+                    </request>
+            -->
+            <request>
+                <websocket type="close"></websocket>
+            </request>
+        </session>
+    </sessions>
 </tsung>

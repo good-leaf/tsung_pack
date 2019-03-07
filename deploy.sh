@@ -1,8 +1,8 @@
 #!/bin/bash
-tar -zxvf erlang.tar.gz
-cp ./erlang/bin/erl /usr/local/bin/tsung_erl
-cp -r ./erlang /usr/local/lib/tsung_erlang
-rm -rf erlang
+#tar -zxvf erlang.tar.gz
+#cp ./erlang/bin/erl /usr/local/bin/tsung_erl
+#cp -r ./erlang /usr/local/lib/tsung_erlang
+#rm -rf erlang
 cp -r ./share/doc/tsung /usr/local/share/doc/
 cp -r ./share/tsung /usr/local/share/
 cp -r ./tsung /usr/local/lib/
